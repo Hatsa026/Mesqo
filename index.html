@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mesqo - No Caffeine. No Limits.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f0f0f;
+  --bg2:#151210;
+  --bg3:#1c1714;
+  --cream:#f5efe6;
+  --cream2:rgba(245,239,230,0.68);
+  --cream3:rgba(245,239,230,0.36);
+  --copper:#c46a2d;
+  --copper2:#de8a4d;
+  --copper3:rgba(196,106,45,0.22);
+  --copper4:rgba(196,106,45,0.09);
+  --dark-copper:#2b1b12;
+  --serif:'Playfair Display',serif;
+  --sans:'DM Sans',sans-serif;
+  --border:0.5px solid rgba(196,106,45,0.2);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--cream);font-family:var(--sans);font-weight:400;overflow-x:hidden;line-height:1.6}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--copper);border-radius:2px}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 48px;
+  transition:background 0.4s,padding 0.4s;
+}
+nav.scrolled{background:rgba(15,15,15,0.95);backdrop-filter:blur(12px);padding:14px 48px;border-bottom:var(--border)}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo-box{width:30px;height:30px;border-radius:7px;background:var(--copper);display:flex;align-items:center;justify-content:center}
+.nav-logo-box svg{width:16px;height:16px}
+.nav-wordmark{font-family:var(--serif);font-size:18px;font-weight:900;letter-spacing:0.04em;color:var(--cream)}
+.nav-wordmark span{color:var(--copper)}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:13px;font-weight:500;letter-spacing:0.04em;color:var(--cream2);transition:color 0.2s}
+.nav-links a:hover{color:var(--copper)}
+.nav-cta{font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--dark-copper);background:var(--copper);padding:9px 20px;border-radius:99px;transition:opacity 0.2s}
+.nav-cta:hover{opacity:0.85;color:var(--dark-copper)}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.nav-hamburger span{width:22px;height:1.5px;background:var(--cream);transition:all 0.3s;display:block}
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(15,15,15,0.98);z-index:99;flex-direction:column;align-items:center;justify-content:center;gap:32px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-family:var(--serif);font-size:28px;font-weight:700;color:var(--cream);transition:color 0.2s}
+.mobile-menu a:hover{color:var(--copper)}
+.mobile-close{position:absolute;top:24px;right:28px;font-size:28px;cursor:pointer;color:var(--cream2)}
+
+#hero{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  background:var(--bg);
+}
+.hero-bg-orb{
+  position:absolute;width:60vw;height:60vw;max-width:700px;max-height:700px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(196,106,45,0.09) 0%,transparent 65%);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.hero-grain{
+  position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:0.04;pointer-events:none;
+}
+.hero-content{position:relative;z-index:2;text-align:center;padding:0 24px;max-width:900px}
+.hero-pill{
+  display:inline-block;font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--copper);border:0.5px solid rgba(196,106,45,0.35);
+  padding:6px 16px;border-radius:99px;margin-bottom:32px;
+  opacity:0;transform:translateY(12px);
+  animation:fadeUp 0.7s 0.2s forwards;
+}
+.hero-h1{
+  font-family:var(--serif);font-size:clamp(48px,8vw,100px);font-weight:900;
+  line-height:0.95;letter-spacing:-0.02em;color:var(--cream);
+  margin-bottom:28px;
+  opacity:0;transform:translateY(20px);
+  animation:fadeUp 0.7s 0.4s forwards;
+}
+.hero-h1 em{color:var(--copper);font-style:italic}
+.hero-sub{
+  font-size:clamp(15px,2vw,18px);color:var(--cream2);font-weight:300;line-height:1.7;
+  max-width:560px;margin:0 auto 40px;
+  opacity:0;transform:translateY(14px);
+  animation:fadeUp 0.7s 0.6s forwards;
+}
+.hero-actions{
+  display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;
+  width:100%;margin:0 auto;
+  opacity:0;transform:translateY(14px);
+  animation:fadeUp 0.7s 0.8s forwards;
+}
+.btn-primary{font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--dark-copper);background:var(--copper);padding:14px 32px;border-radius:99px;transition:opacity 0.2s,transform 0.2s}
+.btn-primary:hover{opacity:0.88;transform:translateY(-1px)}
+.btn-ghost{font-size:13px;font-weight:500;color:var(--cream2);display:flex;align-items:center;gap:8px;transition:color 0.2s}
+.btn-ghost:hover{color:var(--copper)}
+.btn-ghost svg{width:14px;height:14px}
+.hero-scroll{
+  position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  opacity:0;animation:fadeUp 0.7s 1.2s forwards;
+}
+.hero-scroll span{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream3)}
+.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--copper),transparent);animation:scrollPulse 2s infinite}
+
+#stats-strip{
+  border-top:var(--border);border-bottom:var(--border);
+  display:grid;grid-template-columns:repeat(3,1fr);
+  background:var(--bg2);
+}
+.stat-item{
+  padding:32px 24px;text-align:center;
+  border-right:var(--border);
+}
+.stat-item:last-child{border-right:none}
+.stat-num{font-family:var(--serif);font-size:clamp(32px,4vw,48px);font-weight:900;color:var(--copper);line-height:1}
+.stat-label{font-size:12px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--cream3);margin-top:6px}
+
+section{padding:120px 48px}
+.section-eyebrow{font-size:11px;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:var(--copper);margin-bottom:16px}
+.section-title{font-family:var(--serif);font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.1;color:var(--cream);margin-bottom:20px}
+.section-title em{color:var(--copper);font-style:italic}
+.section-body{font-size:16px;color:var(--cream2);font-weight:300;line-height:1.75;max-width:560px}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s,transform 0.7s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+#origin{
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+  max-width:1200px;margin:0 auto;
+  background:none;
+}
+.origin-img-wrap{
+  position:relative;border-radius:16px;overflow:hidden;aspect-ratio:4/5;
+}
+.origin-img-wrap img{width:100%;height:100%;object-fit:cover;filter:saturate(0.55) brightness(0.7)}
+.origin-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,15,15,0.7) 0%,transparent 50%)}
+.origin-img-badge{
+  position:absolute;bottom:20px;left:20px;
+  background:rgba(15,15,15,0.8);backdrop-filter:blur(8px);
+  border:var(--border);border-radius:10px;padding:12px 16px;
+}
+.origin-img-badge-label{font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--copper);font-weight:600;margin-bottom:2px}
+.origin-img-badge-val{font-family:var(--serif);font-size:18px;color:var(--cream);font-weight:700}
+.origin-text{display:flex;flex-direction:column;gap:24px}
+.origin-facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.origin-fact{background:var(--copper4);border:var(--border);border-radius:10px;padding:16px 18px}
+.origin-fact-label{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--copper);font-weight:600;margin-bottom:4px}
+.origin-fact-val{font-size:14px;color:var(--cream);font-weight:500}
+
+#benefits{max-width:1200px;margin:0 auto}
+.benefits-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:80px;align-items:start}
+.benefits-text{position:sticky;top:120px}
+.benefits-cards{display:flex;flex-direction:column;gap:16px}
+.benefit-card{
+  background:var(--copper4);border:var(--border);border-radius:14px;
+  padding:24px 28px;display:flex;gap:20px;align-items:flex-start;
+  transition:background 0.3s,border-color 0.3s,transform 0.3s;
+  cursor:default;
+}
+.benefit-card:hover{background:rgba(196,106,45,0.13);border-color:rgba(196,106,45,0.36);transform:translateX(6px)}
+.benefit-icon{
+  width:44px;height:44px;flex-shrink:0;border-radius:10px;
+  background:rgba(196,106,45,0.15);display:flex;align-items:center;justify-content:center;
+}
+.benefit-icon svg{width:20px;height:20px;stroke:var(--copper)}
+.benefit-title{font-size:15px;font-weight:600;color:var(--cream);margin-bottom:6px}
+.benefit-desc{font-size:13px;color:var(--cream2);font-weight:300;line-height:1.65}
+
+#compare{background:var(--bg2)}
+.compare-inner{max-width:900px;margin:0 auto}
+.compare-header{text-align:center;margin-bottom:56px}
+.compare-header .section-body{margin:0 auto}
+.compare-table{width:100%;border-collapse:collapse}
+.compare-table thead th{
+  padding:14px 24px;font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;
+}
+.compare-table thead th:first-child{text-align:left;color:var(--cream3)}
+.compare-table thead th:nth-child(2){color:var(--copper);background:rgba(196,106,45,0.08);border-radius:10px 10px 0 0;border:var(--border);border-bottom:none}
+.compare-table thead th:nth-child(3){text-align:right;color:var(--cream3)}
+.compare-table tbody tr{border-bottom:0.5px solid rgba(255,255,255,0.05)}
+.compare-table tbody tr:last-child{border-bottom:none}
+.compare-table tbody td{padding:16px 24px;font-size:14px}
+.compare-table tbody td:first-child{color:var(--cream2)}
+.compare-table tbody td:nth-child(2){
+  font-weight:600;color:var(--copper2);text-align:center;
+  background:rgba(196,106,45,0.06);border-left:var(--border);border-right:var(--border);
+}
+.compare-table tbody td:last-child{text-align:right;color:var(--cream3);text-decoration:line-through;opacity:0.6}
+.compare-table tbody tr:last-child td:nth-child(2){border-radius:0 0 10px 10px;border-bottom:var(--border)}
+
+#taste{max-width:1200px;margin:0 auto}
+.taste-inner{display:grid;grid-template-columns:1.1fr 0.9fr;gap:80px;align-items:center}
+.taste-notes{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.taste-pill{
+  font-size:13px;font-weight:500;color:var(--copper);
+  border:0.5px solid rgba(196,106,45,0.3);border-radius:99px;
+  padding:8px 18px;background:rgba(196,106,45,0.07);
+  transition:background 0.2s,border-color 0.2s;cursor:default;
+}
+.taste-pill:hover{background:rgba(196,106,45,0.16);border-color:rgba(196,106,45,0.5)}
+.taste-img{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:1}
+.taste-img img{width:100%;height:100%;object-fit:cover;filter:saturate(0.6) brightness(0.75)}
+.taste-img-text{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  justify-content:flex-end;padding:28px;
+  background:linear-gradient(to top,rgba(15,15,15,0.85) 0%,transparent 55%);
+}
+.taste-img-title{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--cream);line-height:1.2}
+.taste-img-sub{font-size:13px;color:var(--cream2);margin-top:4px}
+
+#brew{background:var(--bg2)}
+.brew-inner{max-width:1200px;margin:0 auto}
+.brew-header{text-align:center;margin-bottom:64px}
+.brew-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.brew-card{
+  background:var(--copper4);border:var(--border);border-radius:14px;
+  padding:28px 24px;text-align:center;
+  transition:background 0.3s,transform 0.3s;cursor:default;
+}
+.brew-card:hover{background:rgba(196,106,45,0.12);transform:translateY(-4px)}
+.brew-card-icon{
+  width:52px;height:52px;border-radius:12px;
+  background:rgba(196,106,45,0.12);border:var(--border);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 16px;
+}
+.brew-card-icon svg{width:24px;height:24px;stroke:var(--copper)}
+.brew-card-title{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--cream);margin-bottom:6px}
+.brew-card-note{font-size:12px;color:var(--cream2);font-weight:300}
+
+#impact{
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+}
+.impact-text{display:flex;flex-direction:column;gap:24px}
+.impact-numbers{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.impact-num-card{background:var(--copper4);border:var(--border);border-radius:12px;padding:20px 22px}
+.impact-num-card-n{font-family:var(--serif);font-size:clamp(28px,3vw,38px);font-weight:900;color:var(--copper);line-height:1}
+.impact-num-card-l{font-size:12px;color:var(--cream2);font-weight:400;margin-top:6px;line-height:1.4}
+.impact-img-wrap{border-radius:16px;overflow:hidden;aspect-ratio:4/5;position:relative}
+.impact-img-wrap img{width:100%;height:100%;object-fit:cover;filter:saturate(0.55) brightness(0.65)}
+.impact-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,15,15,0.75) 0%,transparent 50%)}
+.impact-img-caption{position:absolute;bottom:20px;left:20px;right:20px}
+.impact-img-caption p{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--cream);line-height:1.4}
+
+#cta{
+  position:relative;overflow:hidden;
+  background:var(--dark-copper);
+  text-align:center;
+}
+.cta-ghost{
+  position:absolute;font-family:var(--serif);font-size:clamp(80px,14vw,180px);
+  font-weight:900;font-style:italic;color:rgba(255,255,255,0.04);
+  top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none;
+}
+.cta-inner{position:relative;z-index:2;max-width:700px;margin:0 auto}
+.cta-pill{display:inline-block;font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--copper);border:0.5px solid rgba(196,106,45,0.35);padding:6px 16px;border-radius:99px;margin-bottom:28px}
+.cta-title{font-family:var(--serif);font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1;color:var(--cream);margin-bottom:20px}
+.cta-title em{color:var(--copper);font-style:italic}
+.cta-sub{font-size:16px;color:var(--cream2);font-weight:300;margin-bottom:40px;line-height:1.7}
+.cta-form{display:flex;gap:12px;max-width:460px;margin:0 auto;flex-wrap:wrap}
+.cta-input{
+  flex:1;min-width:200px;background:rgba(255,255,255,0.06);border:0.5px solid rgba(196,106,45,0.3);
+  border-radius:99px;padding:13px 22px;font-size:14px;color:var(--cream);
+  font-family:var(--sans);outline:none;transition:border-color 0.2s;
+}
+.cta-input::placeholder{color:var(--cream3)}
+.cta-input:focus{border-color:rgba(196,106,45,0.6)}
+.cta-submit{
+  font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--dark-copper);background:var(--copper);padding:13px 28px;
+  border-radius:99px;border:none;cursor:pointer;font-family:var(--sans);
+  transition:opacity 0.2s,transform 0.2s;white-space:nowrap;
+}
+.cta-submit:hover{opacity:0.88;transform:translateY(-1px)}
+.cta-note{font-size:12px;color:var(--cream3);margin-top:16px}
+.cta-success{display:none;font-size:15px;color:var(--copper);margin-top:16px;font-weight:500}
+
+footer{
+  background:var(--bg);border-top:var(--border);
+  padding:56px 48px 32px;
+}
+.footer-inner{max-width:1200px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-brand{display:flex;flex-direction:column;gap:16px}
+.footer-brand-desc{font-size:13px;color:var(--cream2);font-weight:300;line-height:1.7;max-width:280px}
+.footer-col-title{font-size:11px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--copper);margin-bottom:16px}
+.footer-col-links{display:flex;flex-direction:column;gap:10px}
+.footer-col-links a{font-size:13px;color:var(--cream2);transition:color 0.2s}
+.footer-col-links a:hover{color:var(--copper)}
+.footer-bottom{border-top:var(--border);padding-top:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-copy{font-size:12px;color:var(--cream3)}
+.footer-tagline{font-size:12px;color:var(--cream3);font-style:italic}
+
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+@keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
+
+@media(max-width:900px){
+  nav{padding:18px 24px}
+  nav.scrolled{padding:12px 24px}
+  .nav-links,.nav-cta{display:none}
+  .nav-hamburger{display:flex}
+  section{padding:80px 24px}
+  #origin,#benefits .benefits-grid,#impact,#taste .taste-inner{grid-template-columns:1fr;gap:48px}
+  #stats-strip{grid-template-columns:1fr}
+  .stat-item{border-right:none;border-bottom:var(--border)}
+  .stat-item:last-child{border-bottom:none}
+  .brew-grid{grid-template-columns:1fr 1fr}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px}
+  .cta-form{flex-direction:column}
+  .cta-input{min-width:unset;width:100%}
+  .benefits-text{position:static}
+}
+@media(max-width:600px){
+  .brew-grid{grid-template-columns:1fr 1fr}
+  .footer-top{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;text-align:center}
+  .origin-facts{grid-template-columns:1fr}
+  .impact-numbers{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav id="main-nav">
+  <div class="nav-logo">
+    <div class="nav-logo-box">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 3C12 3 7 7 7 12C7 14.76 9.24 17 12 17C14.76 17 17 14.76 17 12C17 7 12 3 12 3Z" stroke="#2b1b12" stroke-width="1.5" fill="none"/>
+        <path d="M9 12C9 12 9.5 9 12 8" stroke="#2b1b12" stroke-width="1.2" stroke-linecap="round"/>
+        <circle cx="12" cy="20" r="1" fill="#2b1b12"/>
+      </svg>
+    </div>
+    <span class="nav-wordmark">Mes<span>qo</span></span>
+  </div>
+  <div class="nav-links">
+    <a href="#taste">Taste</a>
+    <a href="#origin">Origin</a>
+    <a href="#benefits">Benefits</a>
+    <a href="#brew">How to Brew</a>
+    <a href="#impact">Impact</a>
+    <a href="#cta" class="nav-cta">Get Early Access</a>
+  </div>
+  <div class="nav-hamburger" id="hamburger" onclick="openMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <span class="mobile-close" onclick="closeMenu()">×</span>
+  <a href="#taste" onclick="closeMenu()">Taste</a>
+  <a href="#origin" onclick="closeMenu()">Origin</a>
+  <a href="#benefits" onclick="closeMenu()">Benefits</a>
+  <a href="#brew" onclick="closeMenu()">How to Brew</a>
+  <a href="#impact" onclick="closeMenu()">Impact</a>
+  <a href="#cta" onclick="closeMenu()" style="color:var(--copper)">Get Early Access</a>
+</div>
+
+<section id="hero">
+  <div class="hero-bg-orb"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-content">
+    <div class="hero-pill">Launching Europe - November 2026</div>
+    <h1 class="hero-h1">No caffeine.<br><em>No limits.</em></h1>
+    <p class="hero-sub">The world's first mesquite espresso. Looks like coffee. Brews like coffee. Feels like coffee - without the crash.</p>
+    <div class="hero-actions">
+      <a href="#cta" class="btn-primary">Get Early Access</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- TASTE - moved up, now first section after hero -->
+<section>
+  <div id="taste" style="max-width:1200px;margin:0 auto">
+    <div class="taste-inner">
+      <div class="reveal">
+        <div class="section-eyebrow">Tasting notes</div>
+        <h2 class="section-title">Rich. Smooth.<br><em>Naturally sweet.</em></h2>
+        <p class="section-body">Slow-roasted to draw out the pod's natural sweetness. No sugar, no syrups, no additives.</p>
+        <div class="taste-notes">
+          <span class="taste-pill">Nutty</span>
+          <span class="taste-pill">Earthy</span>
+          <span class="taste-pill">Natural caramel</span>
+          <span class="taste-pill">Rich body</span>
+          <span class="taste-pill">Naturally sweet</span>
+          <span class="taste-pill">Dark chocolate hints</span>
+          <span class="taste-pill">Vanilla undertone</span>
+          <span class="taste-pill">No acidity</span>
+        </div>
+      </div>
+      <div class="taste-img reveal">
+        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&q=80" alt="A cup of Mesqo" loading="lazy">
+        <div class="taste-img-text">
+          <div class="taste-img-title">One ingredient.<br>All the ritual.</div>
+          <div class="taste-img-sub">Works in any method - espresso, French press, pour-over, moka pot.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORIGIN - rewritten around mesquite the ingredient, less about the family -->
+<section>
+  <div id="origin">
+    <div class="origin-img-wrap reveal">
+      <img src="https://images.unsplash.com/photo-1489493887464-892be6d1daae?w=900&q=80" alt="Mesquite landscape" loading="lazy">
+      <div class="origin-img-overlay"></div>
+      <div class="origin-img-badge">
+        <div class="origin-img-badge-label">Ingredient</div>
+        <div class="origin-img-badge-val">Mesquite pod</div>
+      </div>
+    </div>
+    <div class="origin-text">
+      <div class="reveal">
+        <div class="section-eyebrow">The ingredient</div>
+        <h2 class="section-title">The seedpod the<br>world <em>forgot.</em></h2>
+        <p class="section-body">Long before coffee reached the West, indigenous communities across the Sonoran and Chihuahuan deserts were grinding mesquite pods into flour, bread, and drinks. Naturally sweet, naturally caffeine-free, and a dietary staple for thousands of years.</p>
+      </div>
+      <p class="section-body reveal" style="margin-top:-8px">Today we roast those same pods the way coffee is roasted - slow, low, patient. The result is something that looks and brews like espresso but comes from an entirely different plant, with an entirely different nutritional story.</p>
+      <div class="origin-facts reveal">
+        <div class="origin-fact">
+          <div class="origin-fact-label">Single ingredient</div>
+          <div class="origin-fact-val">Roasted mesquite pod</div>
+        </div>
+        <div class="origin-fact">
+          <div class="origin-fact-label">Composition</div>
+          <div class="origin-fact-val">25% fibre, 13% protein</div>
+        </div>
+        <div class="origin-fact">
+          <div class="origin-fact-label">Additives</div>
+          <div class="origin-fact-val">Absolutely zero</div>
+        </div>
+        <div class="origin-fact">
+          <div class="origin-fact-label">Packaging</div>
+          <div class="origin-fact-val">100% biodegradable</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS - removed pregnancy/nursing/children claims, tightened copy, removed "Genuinely" headline -->
+<section>
+  <div id="benefits" style="max-width:1200px;margin:0 auto">
+    <div class="benefits-grid">
+      <div class="benefits-text reveal">
+        <div class="section-eyebrow">Why Mesqo</div>
+        <h2 class="section-title">What's actually<br><em>in it.</em></h2>
+        <p class="section-body">Mesqo is a different category entirely - a roasted mesquite espresso that happens to be naturally caffeine-free. Here's what's in the pod.</p>
+      </div>
+      <div class="benefits-cards">
+        <div class="benefit-card reveal">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C12 2 8 6 8 11a4 4 0 008 0C16 6 12 2 12 2z"/><path d="M10 11c0 0 .5-2 2-2.5"/></svg>
+          </div>
+          <div>
+            <div class="benefit-title">Naturally caffeine-free</div>
+            <div class="benefit-desc">Not decaffeinated - there's simply no caffeine in the mesquite pod to begin with. No solvents, no extraction, no trace amounts.</div>
+          </div>
+        </div>
+        <div class="benefit-card reveal">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10z"/><path d="M8 12l2 2 4-4"/></svg>
+          </div>
+          <div>
+            <div class="benefit-title">High in dietary fibre</div>
+            <div class="benefit-desc">Mesquite pods are roughly 25% fibre by composition. That's high for any roasted ingredient - and something coffee and decaf can't offer at all.</div>
+          </div>
+        </div>
+        <div class="benefit-card reveal">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          </div>
+          <div>
+            <div class="benefit-title">Mineral content</div>
+            <div class="benefit-desc">Contains calcium, magnesium, potassium, zinc and iron - naturally present in the pod, not added in.</div>
+          </div>
+        </div>
+        <div class="benefit-card reveal">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <div class="benefit-title">Low acidity</div>
+            <div class="benefit-desc">Gentler on the stomach than coffee. If acidity is the reason you've cut coffee out, mesquite espresso gives you the ritual back.</div>
+          </div>
+        </div>
+        <div class="benefit-card reveal">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+          </div>
+          <div>
+            <div class="benefit-title">A long nutritional history</div>
+            <div class="benefit-desc">Mesquite pods have been eaten as a staple food for thousands of years. Traditionally valued for steady, sustained energy - and increasingly studied for blood-sugar effects.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE - rebuilt in Kamana-style matrix format, decaf only, trimmed to what matters -->
+<section id="compare">
+  <div class="compare-inner">
+    <div class="compare-header reveal">
+      <div class="section-eyebrow">Mesqo vs decaf</div>
+      <h2 class="section-title">How it <em>compares.</em></h2>
+      <p class="section-body">Decaf is the closest thing on the shelf. Here's where Mesqo is actually different.</p>
+    </div>
+    <table class="compare-matrix reveal">
+      <thead>
+        <tr>
+          <th class="cm-empty"></th>
+          <th class="cm-brand">Mesqo</th>
+          <th class="cm-comp">Decaf coffee</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="cm-attr">Caffeine</td>
+          <td class="cm-brand-cell">0 mg</td>
+          <td class="cm-comp-cell">Trace amounts</td>
+        </tr>
+        <tr>
+          <td class="cm-attr">Processing</td>
+          <td class="cm-brand-cell">Roasted pod</td>
+          <td class="cm-comp-cell">Chemical solvents</td>
+        </tr>
+        <tr>
+          <td class="cm-attr">Additives</td>
+          <td class="cm-brand-cell">None</td>
+          <td class="cm-comp-cell">Often present</td>
+        </tr>
+        <tr>
+          <td class="cm-attr">Dietary fibre</td>
+          <td class="cm-brand-cell">High (~25%)</td>
+          <td class="cm-comp-cell">None</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Added compare-matrix styles -->
+<style>
+.compare-matrix{width:100%;border-collapse:separate;border-spacing:0;margin-top:8px}
+.compare-matrix thead th{padding:20px 24px;font-size:12px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;text-align:center}
+.compare-matrix th.cm-empty{background:transparent}
+.compare-matrix th.cm-brand{color:var(--cream);background:var(--copper);border-radius:10px 10px 0 0;font-size:14px;letter-spacing:0.08em}
+.compare-matrix th.cm-comp{color:var(--cream3);background:transparent}
+.compare-matrix tbody td{padding:20px 24px;font-size:14px;border-bottom:0.5px solid rgba(255,255,255,0.06)}
+.compare-matrix tbody tr:last-child td{border-bottom:none}
+.compare-matrix td.cm-attr{color:var(--cream2);font-weight:500;text-align:left;letter-spacing:0.02em}
+.compare-matrix td.cm-brand-cell{color:var(--cream);font-weight:600;text-align:center;background:rgba(196,106,45,0.08);border-left:0.5px solid rgba(196,106,45,0.25);border-right:0.5px solid rgba(196,106,45,0.25)}
+.compare-matrix td.cm-comp-cell{color:var(--cream3);text-align:center}
+.compare-matrix tbody tr:last-child td.cm-brand-cell{border-radius:0 0 10px 10px;border-bottom:0.5px solid rgba(196,106,45,0.25)}
+</style>
+
+<!-- BREW unchanged -->
+<section id="brew">
+  <div class="brew-inner">
+    <div class="brew-header reveal">
+      <div class="section-eyebrow">How to brew</div>
+      <h2 class="section-title">Pre-ground. Ready to brew.<br><em>Zero new equipment.</em></h2>
+    </div>
+    <div class="brew-grid">
+      <div class="brew-card reveal">
+        <div class="brew-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        </div>
+        <div class="brew-card-title">Espresso machine</div>
+        <div class="brew-card-note">No grinder needed - use straight from the bag at the same dose as coffee.</div>
+      </div>
+      <div class="brew-card reveal">
+        <div class="brew-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l1 4H7L8 3z"/><rect x="6" y="7" width="12" height="13" rx="2"/><path d="M10 11v4M14 11v4"/></svg>
+        </div>
+        <div class="brew-card-title">French press</div>
+        <div class="brew-card-note">4 minute steep. Same coffee-to-water ratio. Rich and full-bodied result.</div>
+      </div>
+      <div class="brew-card reveal">
+        <div class="brew-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L8 7H4l2 13h12L20 7h-4L12 2z"/><path d="M8 7h8"/></svg>
+        </div>
+        <div class="brew-card-title">Pour-over</div>
+        <div class="brew-card-note">Same grind ratio as filter coffee. Clean, smooth, slightly lighter body.</div>
+      </div>
+      <div class="brew-card reveal">
+        <div class="brew-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10l1 10H6L7 3z"/><path d="M6 13c0 3.31 2.69 6 6 6s6-2.69 6-6"/><path d="M10 7v4M14 7v4"/></svg>
+        </div>
+        <div class="brew-card-title">Moka pot</div>
+        <div class="brew-card-note">No changes to your usual method. The natural caramel finish needs no sweetener.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT - removed fluff line, removed "steward of the land" pull quote, tightened title -->
+<section>
+  <div id="impact">
+    <div class="impact-text">
+      <div class="reveal">
+        <div class="section-eyebrow">Environmental impact</div>
+        <h2 class="section-title">What your<br>purchase <em>does.</em></h2>
+        <p class="section-body">Mesquite is an invasive species in South Africa - it drains groundwater and overtakes farmland. Harvesting the pods by hand before germination slows its spread directly.</p>
+      </div>
+      <div class="impact-numbers">
+        <div class="impact-num-card reveal">
+          <div class="impact-num-card-n">8M L</div>
+          <div class="impact-num-card-l">of underground water protected per 226g box</div>
+        </div>
+        <div class="impact-num-card reveal">
+          <div class="impact-num-card-n">1,000+</div>
+          <div class="impact-num-card-l">people earning seasonal income in the Northern Cape</div>
+        </div>
+        <div class="impact-num-card reveal">
+          <div class="impact-num-card-n">40%</div>
+          <div class="impact-num-card-l">unemployment rate in Calvinia - the community this sustains</div>
+        </div>
+        <div class="impact-num-card reveal">
+          <div class="impact-num-card-n">100%</div>
+          <div class="impact-num-card-l">biodegradable and recyclable packaging</div>
+        </div>
+      </div>
+    </div>
+    <div class="impact-img-wrap reveal">
+      <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=900&q=80" alt="Community harvesters in the Northern Cape, South Africa" loading="lazy">
+      <div class="impact-img-overlay"></div>
+    </div>
+  </div>
+</section>
+
+<section id="cta" style="padding:120px 48px">
+  <div class="cta-ghost">mesqo</div>
+  <div class="cta-inner">
+    <div class="cta-pill reveal">European launch - November 2026</div>
+    <h2 class="cta-title reveal">Be first to serve<br><em>something better.</em></h2>
+    <p class="cta-sub reveal">Mesqo is arriving in European specialty cafés in November 2026. If you run a café, are a distributor, or simply want to be first in line - register your interest now.</p>
+    <form class="cta-form reveal" onsubmit="handleSignup(event)">
+      <input class="cta-input" type="email" placeholder="your@email.com" required id="email-input">
+      <button class="cta-submit" type="submit">Register interest</button>
+    </form>
+    <p class="cta-note reveal">No spam. One email when we launch. That is it.</p>
+    <p class="cta-success" id="cta-success">You are on the list. We will be in touch when we launch in Europe.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          <div class="nav-logo-box">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3C12 3 7 7 7 12C7 14.76 9.24 17 12 17C14.76 17 17 14.76 17 12C17 7 12 3 12 3Z" stroke="#2b1b12" stroke-width="1.5" fill="none"/><path d="M9 12C9 12 9.5 9 12 8" stroke="#2b1b12" stroke-width="1.2" stroke-linecap="round"/><circle cx="12" cy="20" r="1" fill="#2b1b12"/></svg>
+          </div>
+          <span class="nav-wordmark">Mes<span>qo</span></span>
+        </div>
+        <p class="footer-brand-desc">A roasted mesquite espresso. Naturally caffeine-free. Arriving in European specialty cafés, November 2026.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Product</div>
+        <div class="footer-col-links">
+          <a href="#taste">Tasting Notes</a>
+          <a href="#origin">The Ingredient</a>
+          <a href="#benefits">Benefits</a>
+          <a href="#brew">How to Brew</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Impact</div>
+        <div class="footer-col-links">
+          <a href="#impact">Water Conservation</a>
+          <a href="#impact">Community</a>
+          <a href="#origin">Sustainability</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <div class="footer-col-links">
+          <a href="#cta">Get Early Access</a>
+          <a href="mailto:hello@mesqo.com">hello@mesqo.com</a>
+          <a href="#">Trade enquiries</a>
+          <a href="#">Press</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Mesqo. All rights reserved.</p>
+      <p class="footer-tagline">No caffeine. No limits.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>40);
+});
+
+function openMenu(){document.getElementById('mobile-menu').classList.add('open');document.body.style.overflow='hidden'}
+function closeMenu(){document.getElementById('mobile-menu').classList.remove('open');document.body.style.overflow=''}
+
+const reveals=document.querySelectorAll('.reveal');
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}});
+},{threshold:0.12});
+reveals.forEach(r=>observer.observe(r));
+
+function handleSignup(e){
+  e.preventDefault();
+  const btn=e.target.querySelector('.cta-submit');
+  btn.textContent='Sending...';btn.disabled=true;
+  setTimeout(()=>{
+    document.querySelector('.cta-form').style.display='none';
+    document.getElementById('cta-success').style.display='block';
+    document.querySelector('.cta-note').style.display='none';
+  },800);
+}
+</script>
+</body>
+</html>
